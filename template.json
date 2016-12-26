@@ -1,0 +1,187 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_newtonsheikh_adminPassword": {
+            "defaultValue": null,
+            "type": "SecureString"
+        },
+        "virtualMachines_newtonsheikh_name": {
+            "defaultValue": "newtonsheikh",
+            "type": "String"
+        },
+        "networkInterfaces_newtonsheikhNetworkInterface_name": {
+            "defaultValue": "newtonsheikhNetworkInterface",
+            "type": "String"
+        },
+        "publicIPAddresses_ipconfig1_name": {
+            "defaultValue": "ipconfig1",
+            "type": "String"
+        },
+        "virtualNetworks_subnet_name": {
+            "defaultValue": "subnet",
+            "type": "String"
+        },
+        "storageAccounts_storage262zmcc6rkeum_name": {
+            "defaultValue": "storage262zmcc6rkeum",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "Generalized from resource: '/subscriptions/a54c41b3-1995-499b-bf20-f7f397255127/resourceGroups/AzureResourceGroup3-3/providers/Microsoft.Compute/virtualMachines/newtonsheikh'.",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('virtualMachines_newtonsheikh_name')]",
+            "apiVersion": "2015-06-15",
+            "location": "southcentralus",
+            "tags": {
+                "displayName": "virtualmachine"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "Standard_D2_v2"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2012-R2-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "virtualmachineOSDisk",
+                        "createOption": "FromImage",
+                        "vhd": {
+                            "uri": "[concat('https', '://', parameters('storageAccounts_storage262zmcc6rkeum_name'), '.blob.core.windows.net', '/vhds/virtualmachineOSDisk.vhd')]"
+                        },
+                        "caching": "ReadWrite"
+                    },
+                    "dataDisks": []
+                },
+                "osProfile": {
+                    "computerName": "[parameters('virtualMachines_newtonsheikh_name')]",
+                    "adminUsername": "[parameters('virtualMachines_newtonsheikh_name')]",
+                    "windowsConfiguration": {
+                        "provisionVMAgent": true,
+                        "enableAutomaticUpdates": true
+                    },
+                    "secrets": [],
+                    "adminPassword": "[parameters('virtualMachines_newtonsheikh_adminPassword')]"
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_newtonsheikhNetworkInterface_name'))]"
+                        }
+                    ]
+                }
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_storage262zmcc6rkeum_name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_newtonsheikhNetworkInterface_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a54c41b3-1995-499b-bf20-f7f397255127/resourceGroups/AzureResourceGroup3-3/providers/Microsoft.Network/networkInterfaces/newtonsheikhNetworkInterface'.",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('networkInterfaces_newtonsheikhNetworkInterface_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "southcentralus",
+            "tags": {
+                "displayName": "virtualmachineNic"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ipconfig1_name'))]"
+                            },
+                            "subnet": {
+                                "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_subnet_name')), '/subnets/Subnet-1')]"
+                            }
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableIPForwarding": false
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_ipconfig1_name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_subnet_name'))]"
+            ]
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a54c41b3-1995-499b-bf20-f7f397255127/resourceGroups/AzureResourceGroup3-3/providers/Microsoft.Network/publicIPAddresses/ipconfig1'.",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('publicIPAddresses_ipconfig1_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "southcentralus",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a54c41b3-1995-499b-bf20-f7f397255127/resourceGroups/AzureResourceGroup3-3/providers/Microsoft.Network/virtualNetworks/subnet'.",
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[parameters('virtualNetworks_subnet_name')]",
+            "apiVersion": "2016-03-30",
+            "location": "southcentralus",
+            "tags": {
+                "displayName": "subnet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[concat(parameters('virtualNetworks_subnet_name'),'Subnet-1')]",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    },
+                    {
+                        "name": "[concat(parameters('virtualNetworks_subnet_name'),'Subnet-2')]",
+                        "properties": {
+                            "addressPrefix": "10.0.1.0/24"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "comments": "Generalized from resource: '/subscriptions/a54c41b3-1995-499b-bf20-f7f397255127/resourceGroups/azureresourcegroup3-3/providers/Microsoft.Storage/storageAccounts/storage262zmcc6rkeum'.",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_storage262zmcc6rkeum_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "southcentralus",
+            "tags": {
+                "displayName": "storage"
+            },
+            "properties": {},
+            "resources": [],
+            "dependsOn": []
+        }
+    ]
+}

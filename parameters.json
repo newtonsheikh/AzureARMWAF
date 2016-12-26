@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachines_newtonsheikh_adminPassword": {
+            "value": null
+        },
+        "virtualMachines_newtonsheikh_name": {
+            "value": null
+        },
+        "networkInterfaces_newtonsheikhNetworkInterface_name": {
+            "value": null
+        },
+        "publicIPAddresses_ipconfig1_name": {
+            "value": null
+        },
+        "virtualNetworks_subnet_name": {
+            "value": null
+        },
+        "storageAccounts_storage262zmcc6rkeum_name": {
+            "value": null
+        }
+    }
+}
